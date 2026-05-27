@@ -99,6 +99,12 @@ function renderMarkdown($text) {
     return '<div class="markdown-preview">' . implode("\n", $result) . '</div>';
 }
 
+// Handle AJAX preview request early
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'preview') {
+    echo renderMarkdown($_POST['markdown'] ?? '');
+    exit;
+}
+
 // Check if editing an existing note
 $editFile = null;
 $title = '';
@@ -239,11 +245,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'])) {
     </script>
 </body>
 </html>
-
-<?php
-// Handle AJAX preview request
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'preview') {
-    echo renderMarkdown($_POST['markdown'] ?? '');
-    exit;
-}
-?>
