@@ -1,48 +1,48 @@
 <?php
 
-// Only allow POST
+// Apenas permite requisição POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    die('Method Not Allowed');
+    die('Método não permitido');
 }
 
 $notesDir = __DIR__ . '/notes';
 
 if (!isset($_POST['file'])) {
     http_response_code(400);
-    die('Missing file parameter');
+    die('Parâmetro de arquivo ausente');
 }
 
 $filename = basename($_POST['file']);
 $filePath = $notesDir . '/' . $filename;
 
-// Security: prevent path traversal
+// Segurança: impede traversal de caminho
 $realPath = realpath($filePath);
 $notesRealPath = realpath($notesDir);
 
 if (!$realPath || !$notesRealPath || strpos($realPath, $notesRealPath) !== 0) {
     http_response_code(400);
-    die('Invalid file path');
+    die('Caminho de arquivo inválido');
 }
 
-// Check file exists
+// Verifica se o arquivo existe
 if (!file_exists($filePath) || !is_file($filePath)) {
     http_response_code(404);
-    die('File not found');
+    die('Arquivo não encontrado');
 }
 
-// Validate filename contains only safe characters
+// Valida nome do arquivo (apenas letras minúsculas, números e hífens)
 if (!preg_match('/^[a-z0-9-]+\.md$/', $filename)) {
     http_response_code(400);
-    die('Invalid filename');
+    die('Nome de arquivo inválido');
 }
 
-// Delete the file
+// Exclui o arquivo
 if (unlink($filePath)) {
     header('Location: index.php');
     exit;
 } else {
     http_response_code(500);
-    die('Failed to delete file');
+    die('Falha ao excluir o arquivo');
 }
 ?>
