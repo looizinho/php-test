@@ -47,7 +47,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - **Front‑end**
   - `assets/style.css` provides a dark theme, responsive grid layout, and a floating “add” button.
-  - JavaScript in `note.php` toggles between edit and preview modes, sends an AJAX POST for live preview, and updates the preview in real time.
+  - The application renders HTML server‑side via PHP; there is no client‑side JavaScript for live preview in the current version, though a `action=preview` endpoint exists for future AJAX use.
+  - UI strings are in Portuguese.
 
 ## Extensibility Points
 
